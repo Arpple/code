@@ -1,0 +1,221 @@
+#+TITLE: Code
+
+* Format/Styling
+** Tab > Spaces
+*** Why?
+tab = everyone can set it to how many space you are comfortable with
+
+** semicolon = ; ;
+*** What?
+just don't use ;
+
+*** Why?
+who need ; ?
+not human
+not machine // for some language
+
+** Multiple empty line
+*** What?
+#+begin_src js
+const groupOfLogic = () => {
+  a
+  a
+
+  b
+  b
+}
+
+
+otherBlock()
+#+end_src
+
+*** Why?
+can provider better vision of seperation of code
+
+** Any arguments per line
+*** What?
+when function have many arguments it should expand to multiple line
+but let's the human decide how it should be written
+
+*** Why?
+new line can provide a grouping of arguments
+  #+begin_src js
+const processEntityWithPosition = (
+  entity, entityRelated,
+  vectorX, vectorY, vectorZ,
+  other
+) => {}
+  #+end_src
+
+** Length = Lifetime
+*** What?
+the longer the variable/function/class live the longer (descriptive) the name should be
+
+#+begin_src js
+// itemValidator.js
+const filterItemOnlyInStock = (items) =>
+	items.filter((item) => {
+		stocks = Stock.getAllStocks(item)
+		return stocks.filter((s) => s.quantity > 0)
+	})
+#+end_src
+
+** Dangling , when multiline
+*** Why?
+additional 1 key right after you finish a line
+vs
+maintaining the only last line to be without comma
+
+* Code
+** Prefix > Infix
+*** What?
+infix
+#+begin_src js
+obj()
+  .something()
+  .another()
+#+end_src
+
+prefix
+#+begin_src js
+pipe(obj(),
+  X.something(),
+	Y.another()
+)
+#+end_src
+*** Why?
+easier to tap between pipeline by transforming function
+#+begin_src js
+pipe(obj(),
+	debug(log.info)(X.something),
+	Y.another()
+)
+#+end_src
+
+chain fn don't need to be in same or in chained class
+
+** Chain > Big Chunk Factory
+*** What?
+big chunk
+#+begin_src js
+const buildProduct = (params) => ({
+	name: params.name,
+	isActive: params.isActive || true,
+	price: params.price || 0,
+	brand: params.brandId
+		? BrandRepo.find(params.brandId)
+		: null
+})
+#+end_src
+
+chained
+#+begin_src js
+const buildProduct = (name) => ({
+	name,
+	isActive: true,
+	price: 0,
+})
+
+const setActive = (isActive) => (product) => ({
+	...product, isActive
+})
+
+const setPrice = (price) => (product) => ({
+	...product, price
+})
+
+const setBrand = (brandId) => (product) => ({
+	...product,
+	brand: BrandRepo.find(brandId)
+})
+
+product = pipe(buildProduct(),
+	setActive(true),
+	setPrice(100),
+	setBrand(1)
+)
+#+end_src
+
+*** Why?
+don't need to remember parameter key
+easier to seperate big building logic
+
+** Find vs Get
+*** What?
+my suggestion
+~find~ try to retrieve something but it may not found
+so return type will be the thing or null
+
+~get~ just retrieve something and it should be exists
+so return type will be only the thing and may raise exception if not found
+
+** No index file
+*** What?
+for language like js, you can use index file to be root file of directly
+so that you can write import with that directory name
+#+begin_src
+- module
+  - index.js
+  - something.js
+  - else.js
+
+// when use
+import 'module'
+#+end_src
+
+but you can do this instead
+#+begin_src
+- module.js
+- module
+  - something.js
+  - else.js
+
+// when use
+import 'module'
+#+end_src
+
+*** Why?
+because with this you can start with just
+#+begin_src
+- module.js
+#+end_src
+
+and when the module grow larger you don't need any renaming and just create the directory with sub module
+#+begin_src
+- module.js
+- module
+  - something.js
+  - else.js
+#+end_src
+
+* Testing
+** "Fail" test first
+*** Why?
+if the test fail, that means it actually is executed
+
+* Api
+** define base path outside child route
+*** What?
+when defining route, don't define prefix in subpath
+#+begin_src js
+// base.js
+router.use(subRoute)
+
+// subRoute.js
+router.prefix('/sub')
+router.get('/', controller.get)
+#+end_src
+
+instead define it in base path
+#+begin_src js
+// base.js
+router.use('/sub', subRoute)
+
+// subRoute.js
+router.get('/', controller.get)
+#+end_src
+
+*** Why?
+when you digging a code of some api
+it's easier to start from top level which is base path
+by defining prefix in base you can see which file you need to go next without jumping to that file firsts
