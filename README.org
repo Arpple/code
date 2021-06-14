@@ -54,10 +54,10 @@ the longer the variable/function/class live the longer (descriptive) the name sh
 #+begin_src js
 // itemValidator.js
 const filterItemOnlyInStock = (items) =>
-	items.filter((item) => {
-		stocks = Stock.getAllStocks(item)
-		return stocks.filter((s) => s.quantity > 0)
-	})
+  items.filter((item) => {
+    stocks = Stock.getAllStocks(item)
+    return stocks.filter((s) => s.quantity > 0)
+  })
 #+end_src
 
 ** Dangling , when multiline
@@ -80,15 +80,15 @@ prefix
 #+begin_src js
 pipe(obj(),
   X.something(),
-	Y.another()
+  Y.another()
 )
 #+end_src
 *** Why?
 easier to tap between pipeline by transforming function
 #+begin_src js
 pipe(obj(),
-	debug(log.info)(X.something),
-	Y.another()
+  debug(log.info)(X.something),
+  Y.another()
 )
 #+end_src
 
@@ -99,40 +99,40 @@ chain fn don't need to be in same or in chained class
 big chunk
 #+begin_src js
 const buildProduct = (params) => ({
-	name: params.name,
-	isActive: params.isActive || true,
-	price: params.price || 0,
-	brand: params.brandId
-		? BrandRepo.find(params.brandId)
-		: null
+  name: params.name,
+  isActive: params.isActive || true,
+  price: params.price || 0,
+  brand: params.brandId
+    ? BrandRepo.find(params.brandId)
+    : null
 })
 #+end_src
 
 chained
 #+begin_src js
 const buildProduct = (name) => ({
-	name,
-	isActive: true,
-	price: 0,
+  name,
+  isActive: true,
+  price: 0,
 })
 
 const setActive = (isActive) => (product) => ({
-	...product, isActive
+  ...product, isActive
 })
 
 const setPrice = (price) => (product) => ({
-	...product, price
+  ...product, price
 })
 
 const setBrand = (brandId) => (product) => ({
-	...product,
-	brand: BrandRepo.find(brandId)
+  ...product,
+  brand: BrandRepo.find(brandId)
 })
 
 product = pipe(buildProduct(),
-	setActive(true),
-	setPrice(100),
-	setBrand(1)
+  setActive(true),
+  setPrice(100),
+  setBrand(1)
 )
 #+end_src
 
