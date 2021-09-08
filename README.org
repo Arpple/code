@@ -5,16 +5,18 @@
 *** Why?
 tab = everyone can set it to how many space you are comfortable with
 
-** semicolon = ; ;
+** No semicolon
 *** What?
-just don't use ;
+just don't use ; if you can
 
 *** Why?
-who need ; ?
-not human
-not machine // for some language
+human don't read semicolon\
+if machine also don't need it so what does it for?
 
-** Multiple empty line
+if there are possibility for unexpected behavior, it may be worth to put it for safety\
+but consider before if that is from bad writing format or from the language itself
+
+** Allow multiple empty line
 *** What?
 #+begin_src js
 const groupOfLogic = () => {
@@ -30,11 +32,11 @@ otherBlock()
 #+end_src
 
 *** Why?
-can provider better vision of seperation of code
+can provider better outline for seperation of code
 
-** Any arguments per line
+** Allow Any arguments per line
 *** What?
-when function have many arguments it should expand to multiple line
+when function have many arguments it should expand to multiple line\
 but let's the human decide how it should be written
 
 *** Why?
@@ -46,6 +48,22 @@ const processEntityWithPosition = (
   other
 ) => {}
   #+end_src
+
+** Don't enforce newline on multiple line arguments call
+*** What?
+when you want to call or construct something with multiple lines\
+allow to put first or any number of arguments on same line
+
+*** Why?
+there are many cases that it will easier to read
+
+#+begin_src js
+// seperate data from logics
+pipe(data,
+  fn1,
+  fn2
+)
+#+end_src
 
 ** Length = Lifetime
 *** What?
@@ -60,25 +78,25 @@ const filterItemOnlyInStock = (items) =>
   })
 #+end_src
 
-** Dangling , when multiline
+** Dangling comma when multiline
 *** Why?
-additional 1 key right after you finish a line
+additional 1 key right after you finish a line \
 vs
-maintaining the only last line to be without comma
+maintaining the only last line to be without comma \
 
 * Code
 ** Prefix > Infix
 *** What?
 infix
 #+begin_src js
-obj()
+obj
   .something()
   .another()
 #+end_src
 
 prefix
 #+begin_src js
-pipe(obj(),
+pipe(obj,
   X.something(),
   Y.another()
 )
@@ -86,13 +104,13 @@ pipe(obj(),
 *** Why?
 easier to tap between pipeline by transforming function
 #+begin_src js
-pipe(obj(),
+pipe(obj,
   debug(log.info)(X.something),
   Y.another()
 )
 #+end_src
 
-chain fn don't need to be in same or in chained class
+and you can still chain functions even they are not in the same class
 
 ** Chain > Big Chunk Factory
 *** What?
@@ -143,11 +161,16 @@ easier to seperate big building logic
 ** Find vs Get
 *** What?
 my suggestion
-~find~ try to retrieve something but it may not found
-so return type will be the thing or null
 
-~get~ just retrieve something and it should be exists
+~find~ try to retrieve something but it may not found\
++so return type will be the thing or null
+
+~get~ just retrieve something and it should be exists\
 so return type will be only the thing and may raise exception if not found
+
+or you can use other words you want, but be consistent and explicit\
+for example in Laravel there are ~find~ and ~findOrFail~\
+or in elixir you may use ~get~ and ~get!~
 
 ** No index file
 *** What?
@@ -193,6 +216,10 @@ and when the module grow larger you don't need any renaming and just create the 
 *** Why?
 if the test fail, that means it actually is executed
 
+** Test by behaviour
+*** What?
+I have an article for this [[https://dev.to/arpple/writing-test-and-bdd-54p][here]]
+
 * Api
 ** define base path outside child route
 *** What?
@@ -219,3 +246,5 @@ router.get('/', controller.get)
 when you digging a code of some api
 it's easier to start from top level which is base path
 by defining prefix in base you can see which file you need to go next without jumping to that file firsts
+
+and if you start from sub route, you can still guess prefix from file/module name
