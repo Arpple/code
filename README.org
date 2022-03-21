@@ -84,6 +84,19 @@ additional 1 key right after you finish a line
 or
 maintaining the only last line to be without comma
 
+** acronym = word
+*** What?
+treat acronym same as single word, no matter what it is any character long
+in this way, the rule will be simple and the same in every case style
+
+example word: HTML, IO
+
+in camel case: ~html~ ~io~ ~htmlIo~ ~ioHtml~
+
+in pascal case: ~Html~ ~Io~ ~HtmlIo~ ~IoHtml~
+
+in snake case: ~html~ ~io~ ~html_io~ ~io_html~
+
 * Code
 ** Prefix > Infix
 *** What?
