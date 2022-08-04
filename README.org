@@ -185,6 +185,83 @@ or you can use other words you want, but be consistent and explicit
 for example in Laravel there are ~find~ and ~findOrFail~
 or in elixir you may use ~get~ and ~get!~
 
+** Boolean parameter only for data
+only use boolean parameter as a data, never use it for beheaviour
+
+*** What?
+#+begin_src js
+// isActive is the boolean flag for data strucure
+function setActive(isActive) {
+  row.isActive = isActive
+}
+
+// isHungry is the boolean flag (maybe) read from data structure
+// but use to define behavior
+function eatFood(isHungry) {
+  if (isHungry) {
+    // eat
+  } else {
+    // not eat
+  }
+}
+#+end_src
+
+*** Why?
+for readability and also understandability when calling the function
+
+for ~setActive(true)~ you can know right away that ~true~ is mean for ~active~
+
+but for ~eatFood(true)~ it hard to know what ~true~ mean
+
+** Data structure for data
+create data structure to model the data try not to create one for config behavior
+
+*** What?
+data strucutre for data is obvious, but data structure for behavior may look like this
+
+#+begin_src typescript
+type PurchaseParam {
+  isIncludeTax: boolean,
+  shippingFee: number | undefined,
+}
+
+function purchase(param: PurchaseParam) {
+  if (isIncludeTax) {
+  }
+
+  if (shippingFee === 'EMS') {
+  }
+}
+
+const param = {
+  isIncludeTax: // some specific 'Shop'
+  shippingFee: // total price of 'Item[]' over something
+}
+
+purchase(param)
+#+end_src
+
+*** Why?
+making this kind of structure is a sign
+that you separate the decision logic and execution logic in different place
+
+obviously the ~PurchaseParam~ isn't represent any kind of data or model
+but just used do define the behavior of this specific ~purchase()~ function
+
+you can see from example that the actual data is ~Shop~ and ~Item[]~
+and it better to just use the actual data
+#+begin_src typescript
+function purchase(shop: Shop, items: Item[]) {
+  if (shop) { // specific Shop
+    // include tax
+  }
+
+  if (items) { // total price over something
+    // add shipping fee
+  }
+}
+#+end_src
+
 ** No index file
 *** What?
 for language like js, you can use index file to be root file of directly
@@ -233,7 +310,7 @@ if the test fail, that means it actually is executed
 *** What?
 I have an article for this [[https://dev.to/arpple/writing-test-and-bdd-54p][here]]
 
-* Api
+* HTTP Api
 ** define base path outside child route
 *** What?
 when defining route, don't define prefix in subpath
