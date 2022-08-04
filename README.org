@@ -226,10 +226,10 @@ type PurchaseParam {
 }
 
 function purchase(param: PurchaseParam) {
-  if (isIncludeTax) {
+  if (param.isIncludeTax) {
   }
 
-  if (shippingFee === 'EMS') {
+  if (param.shippingFee) {
   }
 }
 
